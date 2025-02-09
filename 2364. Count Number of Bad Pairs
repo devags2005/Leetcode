@@ -1,0 +1,14 @@
+2364. Count Number of Bad Pairs
+Java
+class Solution {
+    public long countBadPairs(int[] nums) {
+        Map<Integer, Integer> count = new HashMap<>();
+        long ans = 0;
+        for(int i = 0; i<nums.length; ++i){
+            int x = i - nums[i];
+            ans +=i - count.getOrDefault(x, 0);
+            count.merge(x, 1, Integer::sum);
+        }
+        return ans;
+    }
+}
