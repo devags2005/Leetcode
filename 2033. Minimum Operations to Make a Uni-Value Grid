@@ -1,0 +1,29 @@
+2033. Minimum Operations to Make a Uni-Value Grid
+Java
+
+import java.util.Arrays;
+
+class Solution {
+    public int minOperations(int[][] grid, int x) {
+        int m = grid.length, n = grid[0].length;
+        int[] nums = new int[m * n];
+        int mod = grid[0][0] % x;
+        int index = 0;
+        for (int[] row : grid) {
+            for (int value : row) {
+                if (value % x != mod) {
+                    return -1;
+                }
+                nums[index++] = value;
+            }
+        }
+        Arrays.sort(nums);
+        int median = nums[nums.length / 2];
+        int operations = 0;
+        for (int value : nums) {
+            operations += Math.abs(value - median) / x;
+        }
+        
+        return operations;
+    }
+}
