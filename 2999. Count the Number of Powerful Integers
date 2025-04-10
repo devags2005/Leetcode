@@ -1,0 +1,43 @@
+2999. Count the Number of Powerful Integers
+Java
+class Solution {
+    private String suffix;
+    private String number;
+    private int limit;
+    private Long[] memo;
+
+    public long numberOfPowerfulInt(long start, long finish, int limit, String s) {
+        this.suffix = s;
+        this.limit = limit;
+
+        number = String.valueOf(start - 1);
+        memo = new Long[20];
+        long countBeforeStart = dfs(0, true);
+
+        number = String.valueOf(finish);
+        memo = new Long[20];
+        long countUpToFinish = dfs(0, true);
+
+        return countUpToFinish - countBeforeStart;
+    }
+
+    private long dfs(int pos, boolean isLimit) {
+        if (number.length() < suffix.length()) return 0;
+        if (!isLimit && memo[pos] != null) return memo[pos];
+        if (number.length() - pos == suffix.length()) {
+            if (isLimit) return suffix.compareTo(number.substring(pos)) <= 0 ? 1 : 0;
+            return 1;
+        }
+
+        int maxDigit = isLimit ? number.charAt(pos) - '0' : 9;
+        maxDigit = Math.min(maxDigit, limit);
+        long count = 0;
+
+        for (int d = 0; d <= maxDigit; d++) {
+            count += dfs(pos + 1, isLimit && d == number.charAt(pos) - '0');
+        }
+
+        if (!isLimit) memo[pos] = count;
+        return count;
+    }
+}
